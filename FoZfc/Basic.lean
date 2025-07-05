@@ -23,6 +23,7 @@ import Mathlib.Data.Fin.Tuple.Basic
   The first argument is implicitly determined.
 - A `FirstOrder.ZFC.bv''` defines the bounded variable with index (k : ℕ).
   The first argument is implicitly determined.
+- A `FirsOrder.ZFC.ModelSets` is a class of models of set theory.
 
 ## Notations
 
