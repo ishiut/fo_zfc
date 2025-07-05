@@ -355,6 +355,13 @@ theorem fixedSnoc_castSucc_4 {n : ℕ} {xs : Fin n → V} {a b c d : V} :
   funext k
   simp
 
+@[simp]
+theorem fixedSnoc_castAdd_castSucc {n n' : ℕ} {xs : Fin (n + n') → V} {x : V} :
+  (fixedSnoc xs x ∘ fun (i : Fin n) ↦ (Fin.castAdd n' i).castSucc) =
+  (xs ∘ fun i ↦ Fin.castAdd n' i) := by
+  funext k
+  simp
+
 end FixedSnoc
 end ZFC
 end FirstOrder
