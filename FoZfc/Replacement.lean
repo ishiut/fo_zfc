@@ -25,6 +25,7 @@ import FoZfc.Axioms
   the function defined by ϕ of fv 0.
 - A `FirstOrder.ZFC.ModelReplacement` is a class of models of Set Theory
   with the replacement schema.
+- A `FirstOrder.ZFC.ModelZF` is a class of models of ZF.
 
 ## Main Statements
 
@@ -155,5 +156,9 @@ theorem int_test [ModelPR V] (s : ℕ → V) (xs : Fin 0 → V) :
     apply Fin.elim0 k
   rw [h1]
   apply hb
+
+class ModelZF (V : Type u) extends ModelEmptyset V, ModelPairing V,
+  ModelUnion V, ModelPowerset V, ModelInfinity V, ModelRegularity V,
+  ModelComprehension V, ModelReplacement V
 
 end FirstOrder.ZFC

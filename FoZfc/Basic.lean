@@ -77,8 +77,6 @@ def ϕbot : Language.LZFC.Formula  ℕ:= Language.BoundedFormula.falsum
 def ϕelt {n : ℕ} (t₁ t₂ : Language.LZFC.Term (ℕ ⊕ Fin n)) :=
   Language.Relations.boundedFormula₂ is_elt_of₂ t₁ t₂
 
-#check ϕelt
-
 -- I added ' to distinguish the outside and inside ∈
 @[inherit_doc] scoped[FirstOrder] infixl : 120 " ∈' " => FirstOrder.ZFC.ϕelt
 
@@ -86,13 +84,15 @@ def ϕelt {n : ℕ} (t₁ t₂ : Language.LZFC.Term (ℕ ⊕ Fin n)) :=
 def ϕnot_elt {n : ℕ} (t₁ t₂ : Language.LZFC.Term (ℕ ⊕ Fin n)) :=
   ∼(Language.Relations.boundedFormula₂ is_elt_of₂ t₁ t₂)
 
-@[inherit_doc] scoped[FirstOrder] infixl : 120 " ∉' " => FirstOrder.ZFC.ϕnot_elt
+@[inherit_doc] scoped[FirstOrder] infixl : 120 " ∉' " =>
+  FirstOrder.ZFC.ϕnot_elt
 
 /-- The negation of the equality of two terms as a bounded formula. -/
 def int_not_equal {n : ℕ} (t₁ t₂ : Language.LZFC.Term (ℕ ⊕ Fin n)) :=
     ∼(FirstOrder.Language.Term.bdEqual t₁ t₂)
 
-@[inherit_doc] scoped[FirstOrder] infixl: 88 " ≠' " => FirstOrder.ZFC.int_not_equal
+@[inherit_doc] scoped[FirstOrder] infixl: 88 " ≠' " =>
+  FirstOrder.ZFC.int_not_equal
 
 /-
 @[inherit_doc] scoped[FirstOrder] infixl:88 " =' " => FirstOrder.Language.Term.bdEqual
@@ -114,10 +114,12 @@ def int_not_equal {n : ℕ} (t₁ t₂ : Language.LZFC.Term (ℕ ⊕ Fin n)) :=
 -/
 
 /-- Make a free variable in LSet. -/
-def fv (n : ℕ) (k : ℕ) : Language.LZFC.Term (ℕ ⊕ Fin n) := Language.Term.var (Sum.inl k)
+def fv (n : ℕ) (k : ℕ) : Language.LZFC.Term (ℕ ⊕ Fin n) :=
+  Language.Term.var (Sum.inl k)
 
 /-- Make a to-be bounded variable indexed by k, in which free variables are indexed by ℕ. -/
-def bv (n : ℕ) (k : Fin n) : Language.LZFC.Term (ℕ ⊕ Fin n) := Language.Term.var (Sum.inr k)
+def bv (n : ℕ) (k : Fin n) : Language.LZFC.Term (ℕ ⊕ Fin n) :=
+  Language.Term.var (Sum.inr k)
 
 /-- Model of set theory. -/
 class ModelSets (V : Type u) extends LZFC.Structure V, Inhabited V where
@@ -135,37 +137,46 @@ infix : 120 " ∉ " => not_is_elt_of
 
 /-- Realize a free varaible. -/
 @[simp]
-theorem realize_fv [ModelSets V] {n : ℕ} {s : ℕ → V} {xs : Fin n → V} (k : ℕ): Language.Term.realize (Sum.elim s xs) (fv n k) = s k := by
+theorem realize_fv [ModelSets V] {n : ℕ} {s : ℕ → V} {xs : Fin n → V}
+    (k : ℕ): Language.Term.realize (Sum.elim s xs) (fv n k) = s k := by
   exact rfl
 
 /-- Realize a bounded variable with the type ℕ. -/
 @[simp]
-theorem realize_bv [ModelSets V] {n : ℕ} (s : ℕ → V) (xs : Fin n → V) (k : Fin n) : Language.Term.realize (Sum.elim s xs) (bv n k) = xs k := by
+theorem realize_bv [ModelSets V] {n : ℕ} (s : ℕ → V) (xs : Fin n → V)
+    (k : Fin n) : Language.Term.realize (Sum.elim s xs) (bv n k) = xs k := by
   rw [bv]
   simp
 
 @[simp]
-theorem realize_in [ModelSets V] {n : ℕ} {s : ℕ → V} {xs : Fin n → V} {t₁ t₂ : LZFC.Term (ℕ ⊕ Fin n)} : (t₁∈'t₂).Realize s xs ↔ Term.realize (Sum.elim s xs) t₁ ∈ Term.realize (Sum.elim s xs) t₂ := by
+theorem realize_in [ModelSets V] {n : ℕ} {s : ℕ → V} {xs : Fin n → V}
+    {t₁ t₂ : LZFC.Term (ℕ ⊕ Fin n)} : (t₁∈'t₂).Realize s xs ↔
+    Term.realize (Sum.elim s xs) t₁ ∈ Term.realize (Sum.elim s xs) t₂ := by
   -- Changed on 6/1
   rw [ModelSets.interpret_is_elt_of]
   apply realize_rel₂
 
 @[simp]
-theorem realize_nin [ModelSets V] {n : ℕ} {s : ℕ → V} {xs : Fin n → V} {t₁ t₂ : LZFC.Term (ℕ ⊕ Fin n)} : (t₁∉'t₂).Realize s xs ↔ Term.realize (Sum.elim s xs) t₁ ∉ Term.realize (Sum.elim s xs) t₂ := by
-  -- Changed on 6/1
+theorem realize_nin [ModelSets V] {n : ℕ} {s : ℕ → V} {xs : Fin n → V}
+    {t₁ t₂ : LZFC.Term (ℕ ⊕ Fin n)} : (t₁∉'t₂).Realize s xs ↔
+    Term.realize (Sum.elim s xs) t₁ ∉ Term.realize (Sum.elim s xs) t₂ := by
   apply not_congr realize_in
 
 @[simp]
-theorem realize_neq [ModelSets V] {n : ℕ} {s : ℕ → V} {xs : Fin n → V} {t₁ t₂ : LZFC.Term (ℕ ⊕ Fin n)} : (t₁≠'t₂).Realize s xs ↔ Term.realize (Sum.elim s xs) t₁ ≠ Term.realize (Sum.elim s xs) t₂ := by
+theorem realize_neq [ModelSets V] {n : ℕ} {s : ℕ → V} {xs : Fin n → V}
+    {t₁ t₂ : LZFC.Term (ℕ ⊕ Fin n)} : (t₁≠'t₂).Realize s xs ↔
+    Term.realize (Sum.elim s xs) t₁ ≠ Term.realize (Sum.elim s xs) t₂ := by
   unfold int_not_equal
   simp
 
 /-- Make a free variable in LSet with n implicit. -/
-def fv' {n : ℕ} (k : ℕ) : Language.LZFC.Term (ℕ ⊕ Fin n) := Language.Term.var (Sum.inl k)
+def fv' {n : ℕ} (k : ℕ) : Language.LZFC.Term (ℕ ⊕ Fin n) :=
+  Language.Term.var (Sum.inl k)
 
 /-- Make a to-be bounded variable indexed by (k : Fin n),
   in which free variables are indexed by ℕ with n implicit. -/
-def bv' {n : ℕ} (k : Fin n) : Language.LZFC.Term (ℕ ⊕ Fin n) := Language.Term.var (Sum.inr k)
+def bv' {n : ℕ} (k : Fin n) : Language.LZFC.Term (ℕ ⊕ Fin n) :=
+  Language.Term.var (Sum.inr k)
 
 /-- Make a to-be bounded variable indexed by (k : ℕ),
   in which free variables are indexed by ℕ with n implicit. -/

@@ -1181,3 +1181,4 @@ theorem int_induction [ModelEPUPIC V] {n : ℕ} {s : ℕ → V} {xs : Fin n → 
 end Comprehension
 
 end ZFC
+end FirstOrder
