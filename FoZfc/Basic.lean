@@ -41,8 +41,6 @@ import Mathlib.Data.Fin.Tuple.Basic
 
 -/
 
-Test
-
 namespace FirstOrder
 open FirstOrder.Language
 open FirstOrder.Language.BoundedFormula
